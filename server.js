@@ -6,6 +6,7 @@ const server =express();
 //const weatherData =require('./weather.json')
 const cors = require('cors');
 const PORT = process.env.PORT
+const axios = require('axios')
 server.use(cors())
 
 // server.get('/' , (req , res)=>{
@@ -41,7 +42,7 @@ async function weatherhandler(req, res) {
     }
     catch (errors) {
 
-        res.send('error: the informition that you searched for it are not found ' + errors);
+        res.send('error: the information not found ' + errors);
     }
 
 }
@@ -72,7 +73,8 @@ async function movieFunc(req, res) {
     }
     catch (errors) {
 
-        res.send('error: the informition that you searched for it are not found' + errors);
+        res.send('error: the information not found' + errors);
+    
     }
 
 }
