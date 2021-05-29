@@ -6,6 +6,7 @@ const server =express();
 //const weatherData =require('./weather.json')
 const cors = require('cors');
 const PORT = process.env.PORT
+const axios = require('axios')
 server.use(cors())
 
 // server.get('/' , (req , res)=>{
@@ -15,36 +16,36 @@ server.use(cors())
 server.get('/movie', movieFunc);
 server.get('/weather', weatherhandler);
 
-class Forecast{
-    constructor(item){
-        this.date =item.valid_date;
-        this.description= item.weather.description
-    }
-}
+// class Forecast{
+//     constructor(item){
+//         this.date =item.valid_date;
+//         this.description= item.weather.description
+//     }
+// }
 
-async function weatherhandler(req, res) {
-    let key = process.env.WEATHER_API_KEY;
-    let cityName = req.query.city_name;
+// async function weatherhandler(req, res) {
+//     let key = process.env.WEATHER_API_KEY;
+//     let cityName = req.query.city_name;
 
-    let url = `https://api.weatherbit.io/v2.0/forecast/daily?city=${cityName}&key=${key}&days=4`
+//     let url = `https://api.weatherbit.io/v2.0/forecast/daily?city=${cityName}&key=${key}&days=4`
 
-    try {
-        let result = await axios.get(url)
+//     try {
+//         let result = await axios.get(url)
 
-        let weatherArray = result.data.data.map(item => {
-            return new Forecast(item);
-            // return newforecast;
-        })
+//         let weatherArray = result.data.data.map(item => {
+//             return new Forecast(item);
+//             // return newforecast;
+//         })
 
-        res.send(weatherArray);
-        console.log(weatherArray);
-    }
-    catch (errors) {
+//         res.send(weatherArray);
+//         console.log(weatherArray);
+//     }
+//     catch (errors) {
 
-        res.send('error: the informition that you searched for it are not found ' + errors);
-    }
+//         res.send('error: the information not found ' + errors);
+//     }
 
-}
+// }
 class Movie {
     constructor(item) {
         this.title = item.original_title,
@@ -72,7 +73,8 @@ async function movieFunc(req, res) {
     }
     catch (errors) {
 
-        res.send('error: the informition that you searched for it are not found' + errors);
+        res.send('error: the information not found' + errors);
+    
     }
 
 }
