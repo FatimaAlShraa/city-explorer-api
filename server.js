@@ -12,19 +12,33 @@ server.use(cors())
 //     let test='hello from me'
 //     res.send(test)
 // })http://localhost:3001/getweather?city_name=Amman
-server.get('/getWeather', (req, res) => {
+server.get('/weather', (req, res) => {
     console.log(req.query)
     let weatherCity= req.query.city_name
-    let wetherItem = weatherData.find(item => {
-        if (item.city_name == weatherCity)
+    let weatherItem = weatherData.find(item => {
+        if (item.city_name.toLowerCase() == weatherCity.toLowerCase())
+        
             return item
     })
-    res.send(wetherItem)
+    console.log(weatherItem.data);
+
+    let saeed=[];
+
+    weatherItem.data.forEach(element=>{
+       saeed.push(new Weather(element));
+    })
+    res.send(saeed)
 })
 
+class Weather {
+    constructor(item){
+        this.date=item.valid_date,
+        this.descreption=`low of ${item.min_temp}, hight of${item.max_temp} with ${item.weather.description}`
+    }
+}
 
 server.get('*', (req, res) => {
-    res.status(500).send('the weather for this city is not found');
+    res.status(500).send('the weather for this city is not item');
 })
 
 
