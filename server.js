@@ -3,14 +3,16 @@
 require('dotenv').config();
 const express = require ('express');
 const server =express();
-const weatherData =require('./weather.json')
+//const weatherData =require('./weather.json')
 const cors = require('cors');
 const PORT = process.env.PORT
+const axios = require('axios')
 server.use(cors())
 
 // server.get('/' , (req , res)=>{
 //     let test='hello from me'
 //     res.send(test)
+
 // })http://localhost:3001/getweather?city_name=Amman
 server.get('/weather', (req, res) => {
     console.log(req.query)
@@ -40,6 +42,9 @@ class Weather {
 server.get('*', (req, res) => {
     res.status(500).send('the weather for this city is not item');
 })
+
+
+
 
 
 server.listen(PORT, () =>{
