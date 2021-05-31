@@ -13,98 +13,38 @@ server.use(cors())
 //     let test='hello from me'
 //     res.send(test)
 
-server.get('/movie', movieFunc);
-server.get('/weather', weatherhandler);
+// })http://localhost:3001/getweather?city_name=Amman
+server.get('/weather', (req, res) => {
+    console.log(req.query)
+    let weatherCity= req.query.city_name
+    let weatherItem = weatherData.find(item => {
+        if (item.city_name.toLowerCase() == weatherCity.toLowerCase())
+        
+            return item
+    })
+    console.log(weatherItem.data);
 
-// class Forecast{
-//     constructor(item){
-//         this.date =item.valid_date;
-//         this.description= item.weather.description
-//     }
-// }
+    let saeed=[];
 
-// async function weatherhandler(req, res) {
-//     let key = process.env.WEATHER_API_KEY;
-//     let cityName = req.query.city_name;
+    weatherItem.data.forEach(element=>{
+       saeed.push(new Weather(element));
+    })
+    res.send(saeed)
+})
 
-//     let url = `https://api.weatherbit.io/v2.0/forecast/daily?city=${cityName}&key=${key}&days=4`
-
-//     try {
-//         let result = await axios.get(url)
-
-//         let weatherArray = result.data.data.map(item => {
-//             return new Forecast(item);
-//             // return newforecast;
-//         })
-
-//         res.send(weatherArray);
-//         console.log(weatherArray);
-//     }
-//     catch (errors) {
-
-//         res.send('error: the information not found ' + errors);
-//     }
-
-// }
-class Movie {
-    constructor(item) {
-        this.title = item.original_title,
-            this.overview = item.overview,
-            this.averageVotes = item.vote_average,
-            this.totalVotes = item.vote_count,
-            this.posterPath = `https://image.tmdb.org/t/p/w500${item.poster_path}`,
-            this.popularity = item.popularity,
-            this.releaseDate = item.release_date
+class Weather {
+    constructor(item){
+        this.date=item.valid_date,
+        this.descreption=`low of ${item.min_temp}, hight of${item.max_temp} with ${item.weather.description}`
     }
 }
-async function movieFunc(req, res) {
-    let key = process.env.MOVIE_API_KEY;
-    let cityName = req.query.city_name;9
 
-    let url = `https://api.themoviedb.org/3/search/movie?api_key=${key}&query=${cityName}&page=1`
+server.get('*', (req, res) => {
+    res.status(500).send('the weather for this city is not item');
+})
 
-    try {
-        let result = await axios.get(url)
-        let movieArr = result.data.results.map(item => {
-            return new Movie(item);
 
-        })
-        res.send(movieArr);
-    }
-    catch (errors) {
 
-        res.send('error: the information not found' + errors);
-    
-    }
-
-}
-// })http://localhost:3001/getWeather?city_name=Amman
-
-// server.get('/getWeather', (req, res) => {
-//     console.log(req.query)
-//     let weatherCity= req.query.city_name
-//     let searchQuery = weatherData.find(item => {
-//         if (item.city_name.toLowerCase == weatherCity.toLowerCase)
-//             return item
-//     })
-//     res.send(searchQuery)
-
-// try{
-//     let forecastArrr=searchQuery.data.map((item)=>{
-//         return new Forecast(item)
-//     })
-//      res.send(forecastArrr)
-// }
-//  catch (errors) {
-
-//         res.status(404).send('error: the informition that you searched for it are not found');
-//  }
-
-// })
-
-// server.get('*', (req, res) => {
-//     res.status(500).send('the weather for this city is not found');
-// })
 
 
 server.listen(PORT, () =>{
